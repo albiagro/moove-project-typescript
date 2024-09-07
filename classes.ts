@@ -1,127 +1,131 @@
 import { IMezzo, IUtente, ICitta } from "./interfaces";
 
-// Definisco i miei tipi custom
-type tipoMedotiPagamento = "paypal" | "mooney" | "carta";
-type tipoMezzi = "bici" | "scooter" | "monopattino";
-type tipoStati = "disponibile" | "in uso";
+// Define my custom types
+type paymentMethodsType = "paypal" | "mooney" | "card";
+type vehicleTypes = "bike" | "scooter" | "electric scooter";
+type statusTypes = "available" | "in use";
 
-let counter : number = 0 // id per i mezzi
+let counter: number = 0; // ID for vehicles
 
-export class Mezzo implements IMezzo {
-  tipo: tipoMezzi;
+export class Vehicle implements IMezzo {
+  type: vehicleTypes;
   id: number;
-  private _stato: tipoStati;
-  utenteAssegnato: Utente | null; // Può essere un utente o null, quando lo sgancio
+  private _status: statusTypes;
+  assignedUser: User | null; // Can be a user or null when unassigned
 
-  public get stato(): tipoStati {
-    return this._stato;
+  public get status(): statusTypes {
+    return this._status;
   }
 
-  public set stato(v: tipoStati) {
-    this._stato = v;
+  public set status(v: statusTypes) {
+    this._status = v;
   }
 
-  constructor(tipo: tipoMezzi) {
-    this.tipo = tipo;
-    this.id = counter++; // assegno questo contare come ID per evitare che nella creazione qualcuno possa creare più mezzi con lo stesso ID
-    this._stato = "disponibile"; // quando creo il mezzo, di default lo creo come disponibile
+  constructor(type: vehicleTypes) {
+    this.type = type;
+    this.id = counter++; // Assign this counter as ID to avoid creating multiple vehicles with the same ID
+    this._status = "available"; // When I create the vehicle, by default it is available
   }
 
-  assegnaUtente(utenteDaAssegnare: Utente): boolean { // lo creo come funzione booleana in modo da comportarmi diversamente nella funziona prenotaMezzo in base all'esito
-    if (this.stato != "in uso") {
-      this.stato = "in uso";
-      this.utenteAssegnato = utenteDaAssegnare;
+  assignUser(userToAssign: User): boolean { // Created as a boolean function to handle different behavior in bookVehicle based on the outcome
+    if (this.status != "in use") {
+      this.status = "in use";
+      this.assignedUser = userToAssign;
       console.log(
-        `L'utente ${this.utenteAssegnato.nome} è stato assegnato correttamente al mezzo ${this.tipo} - ID: ${this.id}!`
+        `User ${this.assignedUser.name} has been successfully assigned to the vehicle ${this.type} - ID: ${this.id}!`
       );
-      return true
+      return true;
     } else {
       console.log(
-         `Impossibile assegnare! Il mezzo ${this.tipo} - ID: ${this.id} è attualmente in uso!`
-       );
-       return false
+        `Unable to assign! The vehicle ${this.type} - ID: ${this.id} is currently in use!`
+      );
+      return false;
     }
   }
 
-  sganciaUtente(): void {
-    // Non chiedo l'utente in input perché dò per scontato che se lo voglio sganciare, sgancio l'utente agganciato in quel momento
+  unassignUser(): void {
+    // No need to ask for the user as input because if I want to unassign, I unassign the user currently assigned
     console.log(
-      `L'utente ${this.utenteAssegnato?.nome} è stato sganciato correttamente dal mezzo ${this.tipo} - ID: ${this.id}!`
+      `User ${this.assignedUser?.name} has been successfully unassigned from the vehicle ${this.type} - ID: ${this.id}!`
     );
-    this.stato = "disponibile";
-    this.utenteAssegnato = null;
+    this.status = "available";
+    this.assignedUser = null;
   }
 }
 
-export class Utente implements IUtente {
-  nome: string;
-  cognome: string;
+export class User implements IUtente {
+  name: string;
+  surname: string;
   email: string;
-  metodoPagamento: tipoMedotiPagamento;
-  mezzoAssegnato: Mezzo | null;
+  paymentMethod: paymentMethodsType;
+  assignedVehicle: Vehicle | null;
 
   constructor(
-    nome: string,
-    cognome: string,
+    name: string,
+    surname: string,
     email: string,
-    metodoPagamento: tipoMedotiPagamento
+    paymentMethod: paymentMethodsType
   ) {
-    this.nome = nome;
-    this.cognome = cognome;
+    this.name = name;
+    this.surname = surname;
     this.email = email;
-    this.metodoPagamento = metodoPagamento;
+    this.paymentMethod = paymentMethod;
   }
 
-  prenotaMezzo(mezzoDaAssegnare: Mezzo): void {
-    if (this.mezzoAssegnato == null) {
-      if (mezzoDaAssegnare.assegnaUtente(this)) this.mezzoAssegnato = mezzoDaAssegnare; // se l'assegnazione è andata a buon fine      
+  bookVehicle(vehicleToAssign: Vehicle): void {
+    if (this.assignedVehicle == null) {
+      if (vehicleToAssign.assignUser(this))
+        this.assignedVehicle = vehicleToAssign; // If the assignment was successful
     } else {
       console.log(
-        `L'utente ${this.nome} è già assegnato al mezzo ${this.mezzoAssegnato.tipo} - ID: ${this.mezzoAssegnato.id}!`
+        `User ${this.name} is already assigned to the vehicle ${this.assignedVehicle.type} - ID: ${this.assignedVehicle.id}!`
       );
     }
   }
 
-  liberaMezzo() {
-    if (this.mezzoAssegnato != null) {
-      this.mezzoAssegnato.sganciaUtente();
-      this.mezzoAssegnato = null;
+  releaseVehicle() {
+    if (this.assignedVehicle != null) {
+      this.assignedVehicle.unassignUser();
+      this.assignedVehicle = null;
     } else {
       console.log(
-        `L'utente ${this.nome} non ha nessun mezzo assegnato da liberare!`
+        `User ${this.name} does not have any assigned vehicle to release!`
       );
     }
   }
 }
 
-export class Citta implements ICitta {
-  nome: string;
-  mezziDisponibili: Mezzo[];
+export class City implements ICitta {
+  name: string;
+  availableVehicles: Vehicle[];
 
   constructor(
-   nome: string,
-   mezziDisponibili: Mezzo[]
- ) {
-   this.nome = nome;
-   this.mezziDisponibili = mezziDisponibili
- }
-
-  aggiungiMezzo(mezzoDaAggiungere: Mezzo): void {
-    this.mezziDisponibili.push(mezzoDaAggiungere);
-    console.log(`Mezzo ${mezzoDaAggiungere.tipo} ID: ${mezzoDaAggiungere.id} aggiunto correttamente alla città ${this.nome}!`)
+    name: string,
+    availableVehicles: Vehicle[]
+  ) {
+    this.name = name;
+    this.availableVehicles = availableVehicles;
   }
 
-  mostramiTuttiIMezzi() : void { // mostro tutti i mezzi
-   console.log(`I mezzi della città ${this.nome} sono i seguenti:`)
-   this.mezziDisponibili.forEach(element => {
-      console.log(`${element.tipo} ID: ${element.id}`)
-   });
+  addVehicle(vehicleToAdd: Vehicle): void {
+    this.availableVehicles.push(vehicleToAdd);
+    console.log(
+      `Vehicle ${vehicleToAdd.type} ID: ${vehicleToAdd.id} successfully added to the city ${this.name}!`
+    );
   }
 
-  mostramiMezziLiberi() : void { // mostro solo mezzi liberi
-   console.log(`I mezzi liberi della città ${this.nome} sono i seguenti:`)
-   this.mezziDisponibili.forEach(element => {
-      if (element.stato == "disponibile") console.log(`${element.tipo} ID: ${element.id}`)
-   });
+  showAllVehicles(): void { // Show all vehicles
+    console.log(`The vehicles in the city ${this.name} are as follows:`);
+    this.availableVehicles.forEach((element) => {
+      console.log(`${element.type} ID: ${element.id}`);
+    });
+  }
+
+  showAvailableVehicles(): void { // Show only available vehicles
+    console.log(`The available vehicles in the city ${this.name} are as follows:`);
+    this.availableVehicles.forEach((element) => {
+      if (element.status == "available")
+        console.log(`${element.type} ID: ${element.id}`);
+    });
   }
 }
