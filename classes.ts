@@ -1,4 +1,4 @@
-import { IMezzo, IUtente, ICitta } from "./interfaces";
+import { IVehicle, IUser, ICity} from "./interfaces";
 
 // Define my custom types
 type paymentMethodsType = "paypal" | "mooney" | "card";
