@@ -1,4 +1,4 @@
-import { IVehicle, IUser, ICity} from "./interfaces";
+import {IVehicle, IUser, ICity} from "./interfaces";
 
 // Define my custom types
 type paymentMethodsType = "paypal" | "mooney" | "card";
@@ -7,7 +7,7 @@ type statusTypes = "available" | "in use";
 
 let counter: number = 0; // ID for vehicles
 
-export class Vehicle implements IMezzo {
+export class Vehicle implements IVehicle {
   type: vehicleTypes;
   id: number;
   private _status: statusTypes;
@@ -53,7 +53,7 @@ export class Vehicle implements IMezzo {
   }
 }
 
-export class User implements IUtente {
+export class User implements IUser {
   name: string;
   surname: string;
   email: string;
@@ -95,7 +95,7 @@ export class User implements IUtente {
   }
 }
 
-export class City implements ICitta {
+export class City implements ICity {
   name: string;
   availableVehicles: Vehicle[];
 
