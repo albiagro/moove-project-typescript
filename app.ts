@@ -1,35 +1,36 @@
-import { Utente, Mezzo, Citta } from "./classes";
+import { User, Vehicle, City } from "./classes";
 
-let utente1 = new Utente("Alberto", "Agrò", "alberto.agro@live.it", "paypal")
-let utente2 = new Utente("Mario", "Rossi", "mario.rossi@live.it", "carta")
+let user1 = new User("Alberto", "Agrò", "alberto.agro@live.it", "paypal");
+let user2 = new User("Mario", "Rossi", "mario.rossi@live.it", "card");
 
-let mezzo1 = new Mezzo("scooter")
-let mezzo2 = new Mezzo("monopattino")
+let vehicle1 = new Vehicle("scooter");
+let vehicle2 = new Vehicle("electric scooter");
 
-let citta1 = new Citta("Torino", [mezzo1]) // creo una città con un solo mezzo
-citta1.aggiungiMezzo(mezzo2) // aggiungo secondo mezzo
-citta1.mostramiTuttiIMezzi() // verifico tutti i mezzi della città1
+let city1 = new City("Turin", [vehicle1]); // create a city with a single vehicle
 
-utente1.prenotaMezzo(mezzo1) // inizio corsa regolare
+city1.addVehicle(vehicle2); // add a second vehicle
+city1.showAllVehicles(); // check all vehicles in city1
 
-utente1.prenotaMezzo(mezzo2) // provo a prenotarne un altro con lo stesso utente
+user1.bookVehicle(vehicle1); // start a regular ride
 
-utente2.prenotaMezzo(mezzo1) // provo a prenotare lo stesso mezzo con un altro utente
+user1.bookVehicle(vehicle2); // try to book another one with the same user
 
-utente1.liberaMezzo() // fine corsa, libero correttamente il mezzo
+user2.bookVehicle(vehicle1); // try to book the same vehicle with another user
 
-utente2.prenotaMezzo(mezzo1) // inizio corsa regolare
+user1.releaseVehicle(); // end the ride, correctly release the vehicle
 
-citta1.mostramiMezziLiberi() // verifico i mezzi liberi della città1, dovrei vedere solo mezzo2
+user2.bookVehicle(vehicle1); // start a regular ride
 
-utente1.liberaMezzo() // provo a liberarlo anche se non ne ho assegnati
+city1.showAvailableVehicles(); // check the available vehicles in city1, should only see vehicle2
 
-utente1.prenotaMezzo(mezzo2) // inizio corsa regolare
+user1.releaseVehicle(); // try to release it even if none are assigned
 
-citta1.mostramiMezziLiberi() // verifico nuovamente i mezzi liberi della città1, non dovrei vederne nessuno
+user1.bookVehicle(vehicle2); // start a regular ride
 
-utente1.liberaMezzo() // fine corsa regolare
+city1.showAvailableVehicles(); // check the available vehicles in city1 again, shouldn't see any
 
-utente2.liberaMezzo()// fine corsa regolare
+user1.releaseVehicle(); // end the regular ride
 
-citta1.mostramiMezziLiberi() // verifico nuovamente i mezzi liberi della città1, dovrei vederli tutti
+user2.releaseVehicle(); // end the regular ride
+
+city1.showAvailableVehicles(); // check the available vehicles in city1 again, should see them all
