@@ -1,7 +1,9 @@
+import {paymentMethodsType, vehicleTypes, statusTypes} from "./definitions"
+
 export interface IVehicle {
-    type: "bike" | "scooter" | "electric scooter";
+    type: vehicleTypes;
     id: number;
-    status: "available" | "in use";
+    status: statusTypes;
     assignUser(userToAssign: IUser): boolean;
 }
 
@@ -9,7 +11,7 @@ export interface IUser {
     name: string;
     surname: string;
     email: string;
-    paymentMethod: "paypal" | "mooney" | "card";
+    paymentMethod: paymentMethodsType;
     bookVehicle(vehicleToAssign: IVehicle): void;
 }
 

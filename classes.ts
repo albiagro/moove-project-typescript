@@ -1,9 +1,6 @@
 import {IVehicle, IUser, ICity} from "./interfaces";
 
-// Define my custom types
-type paymentMethodsType = "paypal" | "mooney" | "card";
-type vehicleTypes = "bike" | "scooter" | "electric scooter";
-type statusTypes = "available" | "in use";
+import {paymentMethodsType, vehicleTypes, statusTypes} from "./definitions"
 
 let counter: number = 0; // ID for vehicles
 
@@ -24,12 +21,12 @@ export class Vehicle implements IVehicle {
   constructor(type: vehicleTypes) {
     this.type = type;
     this.id = counter++; // Assign this counter as ID to avoid creating multiple vehicles with the same ID
-    this._status = "available"; // When I create the vehicle, by default it is available
+    this._status = statusTypes.Available; // When I create the vehicle, by default it is available
   }
 
   assignUser(userToAssign: User): boolean { // Created as a boolean function to handle different behavior in bookVehicle based on the outcome
-    if (this.status != "in use") {
-      this.status = "in use";
+    if (this.status != statusTypes.Busy) {
+      this.status = statusTypes.Busy;
       this.assignedUser = userToAssign;
       console.log(
         `User ${this.assignedUser.name} has been successfully assigned to the vehicle ${this.type} - ID: ${this.id}!`
@@ -48,7 +45,7 @@ export class Vehicle implements IVehicle {
     console.log(
       `User ${this.assignedUser?.name} has been successfully unassigned from the vehicle ${this.type} - ID: ${this.id}!`
     );
-    this.status = "available";
+    this.status = statusTypes.Available;
     this.assignedUser = null;
   }
 }
