@@ -1,9 +1,9 @@
-import {paymentMethodsType, vehicleTypes, statusTypes} from "./definitions"
+import {PaymentMethodsType, VehicleTypes, StatusTypes} from "./definitions"
 
 export interface IVehicle {
-    type: vehicleTypes;
+    type: VehicleTypes;
     id: number;
-    status: statusTypes;
+    status: StatusTypes;
     assignUser(userToAssign: IUser): boolean;
 }
 
@@ -11,7 +11,7 @@ export interface IUser {
     name: string;
     surname: string;
     email: string;
-    paymentMethod: paymentMethodsType;
+    paymentMethod: PaymentMethodsType;
     bookVehicle(vehicleToAssign: IVehicle): void;
 }
 

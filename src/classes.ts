@@ -1,32 +1,33 @@
 import {IVehicle, IUser, ICity} from "./interfaces";
 
-import {paymentMethodsType, vehicleTypes, statusTypes} from "./definitions"
+import {PaymentMethodsType, VehicleTypes, StatusTypes} from "./definitions"
 
 let counter: number = 0; // ID for vehicles
 
 export class Vehicle implements IVehicle {
-  type: vehicleTypes;
+  type: VehicleTypes;
   id: number;
-  private _status: statusTypes;
+  private _status: StatusTypes;
   assignedUser: User | null; // Can be a user or null when unassigned
 
-  public get status(): statusTypes {
+  public get status(): StatusTypes {
     return this._status;
   }
 
-  public set status(v: statusTypes) {
+  public set status(v: StatusTypes) {
     this._status = v;
   }
 
-  constructor(type: vehicleTypes) {
+  constructor(type: VehicleTypes) {
     this.type = type;
     this.id = counter++; // Assign this counter as ID to avoid creating multiple vehicles with the same ID
-    this._status = statusTypes.Available; // When I create the vehicle, by default it is available
+    this._status = StatusTypes.Available; // When I create the vehicle, by default it is available
+    this.assignedUser = null;
   }
 
   assignUser(userToAssign: User): boolean { // Created as a boolean function to handle different behavior in bookVehicle based on the outcome
-    if (this.status != statusTypes.Busy) {
-      this.status = statusTypes.Busy;
+    if (this.status != StatusTypes.Busy) {
+      this.status = StatusTypes.Busy;
       this.assignedUser = userToAssign;
       console.log(
         `User ${this.assignedUser.name} has been successfully assigned to the vehicle ${this.type} - ID: ${this.id}!`
@@ -45,7 +46,7 @@ export class Vehicle implements IVehicle {
     console.log(
       `User ${this.assignedUser?.name} has been successfully unassigned from the vehicle ${this.type} - ID: ${this.id}!`
     );
-    this.status = statusTypes.Available;
+    this.status = StatusTypes.Available;
     this.assignedUser = null;
   }
 }
@@ -54,19 +55,20 @@ export class User implements IUser {
   name: string;
   surname: string;
   email: string;
-  paymentMethod: paymentMethodsType;
+  paymentMethod: PaymentMethodsType;
   assignedVehicle: Vehicle | null;
 
   constructor(
     name: string,
     surname: string,
     email: string,
-    paymentMethod: paymentMethodsType
+    paymentMethod: PaymentMethodsType
   ) {
     this.name = name;
     this.surname = surname;
     this.email = email;
     this.paymentMethod = paymentMethod;
+    this.assignedVehicle = null;
   }
 
   bookVehicle(vehicleToAssign: Vehicle): void {

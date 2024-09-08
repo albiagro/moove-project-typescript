@@ -1,11 +1,11 @@
 import { User, Vehicle, City } from "./classes";
-import { paymentMethodsType, vehicleTypes } from "./definitions";
+import { PaymentMethodsType, VehicleTypes } from "./definitions";
 
-let user1 = new User("Alberto", "Agrò", "alberto.agro@live.it", paymentMethodsType.PayPal);
-let user2 = new User("Mario", "Rossi", "mario.rossi@live.it", paymentMethodsType.Card);
+let user1 = new User("Alberto", "Agrò", "alberto.agro@live.it", PaymentMethodsType.PayPal);
+let user2 = new User("Mario", "Rossi", "mario.rossi@live.it", PaymentMethodsType.Card);
 
-let vehicle1 = new Vehicle(vehicleTypes.Scooter);
-let vehicle2 = new Vehicle(vehicleTypes.ElectricScooter);
+let vehicle1 = new Vehicle(VehicleTypes.Scooter);
+let vehicle2 = new Vehicle(VehicleTypes.ElectricScooter);
 
 let city1 = new City("Turin", [vehicle1]); // create a city with a single vehicle
 

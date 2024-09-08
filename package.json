@@ -1,0 +1,13 @@
+{
+  "name": "typescript",
+  "version": "1.0.0",
+  "description": "Moove Project (Typescript application)",
+  "main": "app.js",
+  "scripts": {
+  "start": "node dist/app.js",
+  "verify": "tsc"
+},
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
